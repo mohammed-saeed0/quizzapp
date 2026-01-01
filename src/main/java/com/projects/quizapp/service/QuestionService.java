@@ -5,6 +5,8 @@ import com.projects.quizapp.dto.QuestionDto;
 import com.projects.quizapp.entity.Question;
 import com.projects.quizapp.mapper.QuestionMapper;
 import com.projects.quizapp.repository.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ public class QuestionService {
     QuestionRepository questionRepository;
     @Autowired
     QuestionMapper questionMapper;
+    Logger log = LoggerFactory.getLogger(QuestionService.class);
 
     public ResponseEntity<List<QuestionDto>> getAllQuestion(){
         try {
@@ -54,6 +57,8 @@ public class QuestionService {
     public ResponseEntity<String> addQuestion(CreateQuestionDto createQuestionDto) {
         Question question = questionMapper.toEntity(createQuestionDto);
 
+        log.info("this is the creation of new question");
+        System.out.println("this is create");
         questionRepository.save(question);
         return new ResponseEntity<>("Success", HttpStatus.CREATED);
     }
