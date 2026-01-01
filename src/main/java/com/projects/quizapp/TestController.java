@@ -1,5 +1,6 @@
 package com.projects.quizapp;
 
+import com.projects.quizapp.entity.Question;
 import com.projects.quizapp.repository.QuestionRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

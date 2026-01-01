@@ -1,6 +1,8 @@
 package com.projects.quizapp.controller;
 
-import com.projects.quizapp.Question;
+import com.projects.quizapp.dto.CreateQuestionDto;
+import com.projects.quizapp.dto.QuestionDto;
+import com.projects.quizapp.entity.Question;
 import com.projects.quizapp.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +16,17 @@ public class QuestionController {
     QuestionService questionService;
 
     @GetMapping("allQuestions")
-    public ResponseEntity<List<Question>> getAllQuestions(){
+    public ResponseEntity<List<QuestionDto>> getAllQuestions(){
         return questionService.getAllQuestion();
     }
 
     @GetMapping("category/{category}")
-    public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable String category){
+    public ResponseEntity<List<QuestionDto>> getQuestionsByCategory(@PathVariable String category){
         return questionService.getQuestionsByCategory(category);
     }
 
     @PostMapping("add")
-    public ResponseEntity<String> addQuestion(@RequestBody Question question){
-        return questionService.addQuestion(question);
+    public ResponseEntity<String> addQuestion(@RequestBody CreateQuestionDto createQuestionDto){
+        return questionService.addQuestion(createQuestionDto);
     }
 }

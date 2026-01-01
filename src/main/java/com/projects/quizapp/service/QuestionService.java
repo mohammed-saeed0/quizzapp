@@ -1,6 +1,9 @@
 package com.projects.quizapp.service;
 
-import com.projects.quizapp.Question;
+import com.projects.quizapp.dto.CreateQuestionDto;
+import com.projects.quizapp.dto.QuestionDto;
+import com.projects.quizapp.entity.Question;
+import com.projects.quizapp.mapper.QuestionMapper;
 import com.projects.quizapp.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +17,16 @@ import java.util.List;
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
+    @Autowired
+    QuestionMapper questionMapper;
 
-    public ResponseEntity<List<Question>> getAllQuestion(){
+    public ResponseEntity<List<QuestionDto>> getAllQuestion(){
         try {
-            return new ResponseEntity<>(questionRepository.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(questionRepository.findAll()
+                    .stream()
+                    .map(questionMapper::toDto)
+                    .toList()
+                    , HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -25,16 +34,26 @@ public class QuestionService {
     }
 
 
-    public ResponseEntity<List<Question>> getQuestionsByCategory(String category) {
+    public ResponseEntity<List<QuestionDto>> getQuestionsByCategory(String category) {
         try {
-            return new ResponseEntity<>(questionRepository.findByCategory(category), HttpStatus.OK);
+            return new ResponseEntity<>(questionRepository.findByCategory(category)
+                    .stream()
+                    .map(questionMapper::toDto)
+                    .toList()
+                    , HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
         }
-        return new ResponseEntity<>(questionRepository.findByCategory(category), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(questionRepository.findByCategory(category)
+                .stream()
+                .map(questionMapper::toDto)
+                .toList()
+                , HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<String> addQuestion(Question question) {
+    public ResponseEntity<String> addQuestion(CreateQuestionDto createQuestionDto) {
+        Question question = questionMapper.toEntity(createQuestionDto);
+
         questionRepository.save(question);
         return new ResponseEntity<>("Success", HttpStatus.CREATED);
     }
